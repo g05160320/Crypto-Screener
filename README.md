@@ -64,7 +64,9 @@ pip install -r requirements.txt
 
 ### 增長百分比計算
 
+
 五個時間點的增長百分比必須是隨著時間越接近而遞增
+
   30ma   45ma  60ma 
   
  [ 2.5,  1.8,  1.2] n-1天 
@@ -76,6 +78,7 @@ pip install -r requirements.txt
  [ 1.9,  1.5,  0.9] n-4天 
  
  [ 1.7,  1.4,  0.8] n-5天 
+ 
 
 1. **MA增長百分比**:
    

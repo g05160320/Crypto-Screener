@@ -22,6 +22,9 @@ https://github.com/g05160320/Crypto-Screener/assets/170905829/e30e5179-4024-4ad2
 - Bitget
 - BingX
 
+BingX跟其他交易所不同，有永續合約和標準合約兩種可做交易的標的也不完全相同
+因此ccxt只能抓到同時存在永續合約和標準合約的標的
+
 ## 使用方式
 
 ### 使用exe執行

@@ -10,8 +10,8 @@
 - 繪製成圖表
 - 儲存圖表
 
+https://github.com/g05160320/Crypto-Screener/assets/170905829/e30e5179-4024-4ad2-aa88-2012d0e6a9f5
 
-https://github.com/g05160320/CryptoFilter/assets/170905829/3486fc77-574a-4f84-8e95-8948eed9da03
 
 
 ## 支援交易所

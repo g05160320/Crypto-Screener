@@ -82,6 +82,8 @@ pip install -r requirements.txt
  [ 1.9  ,  1.5  ,  0.9 ] n-4天 
  
  [ 1.7  ,  1.4  ,  0.8 ] n-5天 
+
+
  
 
 1. **MA增長百分比**:

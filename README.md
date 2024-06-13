@@ -10,7 +10,11 @@
 - 繪製成圖表
 - 儲存圖表
 
-https://github.com/g05160320/Crypto-Screener/assets/170905829/e30e5179-4024-4ad2-aa88-2012d0e6a9f5
+
+
+
+https://github.com/g05160320/Crypto-Screener/assets/170905829/2098907a-67fc-4c84-b343-8261e51288ff
+
 
 
 

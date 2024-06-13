@@ -13,8 +13,8 @@
 
 ## Demo
 
-https://github.com/g05160320/Crypto-Screener/assets/170905829/2098907a-67fc-4c84-b343-8261e51288ff
 
+https://github.com/g05160320/Crypto-Screener/assets/170905829/cc80b7f8-7b5f-470d-94d9-02c7645bbabc
 
 
 

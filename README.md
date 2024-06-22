@@ -124,17 +124,19 @@ import time
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-# 交易所選擇
+
 selected_exchange=('okx')# 可更改成binance, bybit, okx, bitget, bingx
 exchange = getattr(ccxt, selected_exchange)()
 markets = exchange.load_markets()
 
+
+# 获取所有交易对
 markets = exchange.load_markets()
 filtered_markets = [symbol for symbol, market in markets.items() if market['type'] == 'swap' and '/USDT:USDT' in symbol]
 
 
 limit = 66
-timeframes = ['1d', '4h']
+timeframes = ['1d', '4h']  # 修改为两个时间框架
 
 def calculate_growth_percent(df):
     growth_percent = np.zeros((5, 3))
@@ -144,12 +146,12 @@ def calculate_growth_percent(df):
         d3 = df.iloc[-i-3]
         d4 = df.iloc[-i-4]
         d5 = df.iloc[-i-5]
-        
+
         # 檢查增長百分比的篩選條件
         if (d['ma_30'] > d2['ma_30'] > d3['ma_30'] > d4['ma_30'] > d5['ma_30'] and
             d['ma_45'] > d2['ma_45'] > d3['ma_45'] > d4['ma_45'] > d5['ma_45'] and
             d['ma_60'] > d2['ma_60'] > d3['ma_60'] > d4['ma_60'] > d5['ma_60']):
-            
+
             # 計算增長百分比
             growth_percent[i, 0] = ((d['ma_30'] - d2['ma_30']) / d2['ma_30']) * 100
             growth_percent[i, 1] = ((d['ma_45'] - d2['ma_45']) / d2['ma_45']) * 100
@@ -161,17 +163,17 @@ def calculate_growth_percent(df):
     return growth_percent
 
 def process_symbol(symbol, timeframe):
-    # 抓取市場數據
+    # 获取当前交易对的历史价格数据
     ohlcv = exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
-    
+
     if len(ohlcv) >= 66:
-        # 
+        # 将数据转换成 DataFrame
         df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])  # 創建DataFrame對象
         df['date'] = pd.to_datetime(df['timestamp'], unit='ms')  # 將timestamp轉換為日期時間格式
         df['ma_30'] = df['close'].rolling(window=30).mean()  # 計算30日移動平均線
         df['ma_45'] = df['close'].rolling(window=45).mean()  # 計算45日移動平均線
         df['ma_60'] = df['close'].rolling(window=60).mean()  # 計算60日移動平均線
-        
+
         growth_percent_symbol = calculate_growth_percent(df)  # 計算增長百分比
         growth_average = (growth_percent_symbol[:, 0] + growth_percent_symbol[:, 1] + growth_percent_symbol[:, 2]) / 3  # 計算平均增長率
         strength_score = growth_average.mean()  # 計算強勢評分
@@ -179,68 +181,72 @@ def process_symbol(symbol, timeframe):
     else:
         return None
 
-    
-    
 
+
+# 开始时间
 start_time = time.time()
 
-symbol_1D, symbol_4H = [], []  
-common_symbols = []  
-
+symbol_1D, symbol_4H = [], []
+common_symbols = []
+# 遍历两个时间框架
 for timeframe in timeframes:
     if timeframe == "1d":
         print("\n1D：\n")
-        
+
     elif timeframe == "4h":
         print("\n4H：\n")
-        
-    higher_base = []  
-    
-    
+
+    higher_base = []  # 重置higher_base
+
+    # 遍历所有 Bybit 支持的交易对
     for symbol in filtered_markets:
         result = process_symbol(symbol, timeframe)
         if result:
             higher_base.append(result)
 
-    # 按強勢分數排序
+    # 按强势分数降序排列higher_base
     higher_base.sort(key=lambda x: list(x.values())[0], reverse=True)
-    
-    # 將分數低於BTC、ETH的元素刪除
+
+    # 將 higher_base 中值低於 BTC/USDT:USDT 和 ETH/USDT:USDT 的元素刪除
+    # 從 higher_base 中取得 BTC/USDT:USDT 和 ETH/USDT:USDT 的值作為閾值
     BTC_threshold = next(item[list(item.keys())[0]] for item in higher_base if list(item.keys())[0] == 'BTC/USDT:USDT')
     ETH_threshold = next(item[list(item.keys())[0]] for item in higher_base if list(item.keys())[0] == 'ETH/USDT:USDT')
-    
-    higher_base = [item for item in higher_base if list(item.values())[0] >= BTC_threshold and list(item.values())[0] >= ETH_threshold]
-    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT']]
-    
-    # 輸出結果
-    for symbol in higher_base[:10]:  # 前10结果
+
+    # 將 higher_base 中值低於 BTC/USDT:USDT 和 ETH/USDT:USDT 的元素刪除
+    higher_base = [item for item in higher_base if list(item.values())[0] >= BTC_threshold and list(item.values())[0] >= ETH_threshold and list(item.values())[0] > 0]
+
+    # 刪除 BTC/USDT:USDT 和 ETH/USDT:USDT
+    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT','BTCDOM/USDT:USDT','ETHDOM/USDT:USDT']]
+
+    # 打印排序后的结果
+    for symbol in higher_base[:10]:  # 仅打印前10个结果
         symbol, score = list(symbol.items())[0]
         print(f"{symbol}: {score:.2f}")
-        
 
+    # 根據時間間隔更新相應的交易對列表
     for symbol_score_dict in higher_base[:10]:
         symbol = list(symbol_score_dict.keys())[0]
         if timeframe == "1d":
-            symbol_1D.append(symbol)  
-            symbol_1D_split = [symbol.split('/')[0] for symbol in symbol_1D]
+            symbol_1D.append(symbol)  # 將1D時間間隔的交易對添加到列表中
+            symbol_1D_split = [symbol.split('/')[0] for symbol in symbol_1D]  # 將交易對進行拆分，只保留基礎貨幣部分
         elif timeframe == "4h":
-            symbol_4H.append(symbol) 
-            symbol_4H_split = [symbol.split('/')[0] for symbol in symbol_4H]
-    
-    
-symbol_1D_split += [''] * (10 - len(symbol_1D_split))  
-symbol_4H_split += [''] * (10 - len(symbol_4H_split))  
-common_symbols += [''] * (10 - len(common_symbols))  
-common_symbols = [] 
-common_symbols = list(set(symbol_1D_split) & set(symbol_4H_split))
-print("\n重複：")
-for i in common_symbols:
-    print(i)
-        
+            symbol_4H.append(symbol)  # 將4H時間間隔的交易對添加到列表中
+            symbol_4H_split = [symbol.split('/')[0] for symbol in symbol_4H]  # 將交易對進行拆分，只保留基礎貨幣部分
 
+
+symbol_1D_split += [''] * (10 - len(symbol_1D_split))
+symbol_4H_split += [''] * (10 - len(symbol_4H_split))
+common_symbols += [''] * (10 - len(common_symbols))
+common_symbols = []
+common_symbols = list(set(symbol_1D_split) & set(symbol_4H_split))  # 找出1D和4H時間間隔中都存在的交易對
+print("\n重複幣別：")
+for i in common_symbols:
+    print(i)  # 將重疊的交易對輸出到文字輸出欄位中
+
+# 结束时间
 end_time = time.time()
 
-
+# 计算程序运行时间
 total_time = int(end_time - start_time)
 print(f"\n執行時間：{total_time}秒")
 
@@ -248,11 +254,11 @@ print(f"\n執行時間：{total_time}秒")
 
 ########繪圖設置########
 
-
-numbers = list(range(1, 11))  
-symbol_1D_split += [''] * (10 - len(symbol_1D_split))  
-symbol_4H_split += [''] * (10 - len(symbol_4H_split))  
-common_symbols += [''] * (10 - len(common_symbols))  
+# 添加編號列和填充值來確保長度為10
+numbers = list(range(1, 11))
+symbol_1D_split += [''] * (10 - len(symbol_1D_split))
+symbol_4H_split += [''] * (10 - len(symbol_4H_split))
+common_symbols += [''] * (10 - len(common_symbols))
 
 df_symbols = pd.DataFrame({
     'No.': numbers,
@@ -283,23 +289,23 @@ for key, cell in table.get_celld().items():
 # 調整表格每格的長寬比例
 table.scale(1, 1.5)
 # 獲取當前日期並格式化為"YYYYMMDD"
-current_date = datetime.now().strftime("%Y-%m-%d")  
+current_date = datetime.now().strftime("%Y-%m-%d")
 
 plt.subplots_adjust(top=1)
 
 if selected_exchange in ['binance', 'bybit','okx', 'bitget', 'bingx']:
     if selected_exchange == 'binance':
-        exchange_name = 'Binance'  
-        
+        exchange_name = 'Binance'
+
     elif selected_exchange == 'bybit':
-        exchange_name = 'Bybit'  
+        exchange_name = 'Bybit'
     elif selected_exchange == 'okx':
-        exchange_name = 'OKX'  
+        exchange_name = 'OKX'
     elif selected_exchange == 'bitget':
-        exchange_name = 'Bitget'  
+        exchange_name = 'Bitget'
     elif selected_exchange == 'bingx':
-        exchange_name = 'BingX' 
-        
+        exchange_name = 'BingX'
+
 plt.figtext(0.5, 0.97, f'{current_date} {exchange_name} Bullish Crypto', ha='center', va='top', fontsize=14, color='black')
 
 # 隱藏坐標軸

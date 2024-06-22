@@ -216,7 +216,7 @@ for timeframe in timeframes:
     higher_base = [item for item in higher_base if list(item.values())[0] >= BTC_threshold and list(item.values())[0] >= ETH_threshold and list(item.values())[0] > 0]
 
     # 刪除 BTC/USDT:USDT 和 ETH/USDT:USDT
-    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT','BTCDOM/USDT:USDT','ETHDOM/USDT:USDT']]
+    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT','USDC/USDT:USDT','BTCDOM/USDT:USDT','ETHDOM/USDT:USDT']]
 
     # 打印排序后的结果
     for symbol in higher_base[:10]:  # 仅打印前10个结果

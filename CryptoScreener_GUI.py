@@ -100,6 +100,7 @@ class App(tk.Tk):
         
         self.output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
         
 
     def create_chart_areas(self):
@@ -369,6 +370,8 @@ class App(tk.Tk):
         if selected_exchange in ['binance', 'bybit']:
             def multi_threaded_output_text(message):
                 self.output_text.insert(tk.END, message + "\n")
+                self.output_text.see(tk.END)
+                self.output_text.update_idletasks()
                   
 
                 
@@ -529,12 +532,6 @@ class App(tk.Tk):
                 # 更新進度條
                 self.update_progress(100)
                 
-            
-            
-                # 绘制图表
-                self.draw_btc_eth_chart('1d')
-                self.draw_chart(symbol_1D_split, symbol_4H_split, common_symbols)
-                self.draw_candlestick_chart(symbol_1D_split, symbol_4H_split)
     
                 #計時
                 end_time = time.time()  # 結束時間
@@ -548,6 +545,8 @@ class App(tk.Tk):
             def update_output_text(message):
             # 更新文字輸出欄位的內容
                 self.output_text.insert(tk.END, message + "\n")
+                self.output_text.see(tk.END)
+                self.output_text.update_idletasks()
                 
             
             # 清空文字輸出欄位
@@ -666,7 +665,21 @@ class App(tk.Tk):
                 for i in common_symbols:
                     update_output_text(i)
         
-                
+                exchange = getattr(ccxt, selected_exchange)()
+                limit = 180
+                for timeframe in ['1d', '4h']:
+                    for symbol in ['BTC/USDT:USDT', 'ETH/USDT:USDT']:
+                        try:
+                            ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
+                            df = pd.DataFrame(ohlcv, columns=['datetime', 'open', 'high', 'low', 'close', 'volume'])
+                            df['datetime'] = pd.to_datetime(df['datetime'], unit='ms')
+                            df['date_num'] = mdates.date2num(df['datetime'])
+                            df['ma_30'] = df['close'].rolling(window=30).mean()
+                            df['ma_45'] = df['close'].rolling(window=45).mean()
+                            df['ma_60'] = df['close'].rolling(window=60).mean()
+                            self.btc_eth_data[timeframe][symbol] = df
+                        except Exception as e:
+                            print(f"Error fetching data for {symbol} {timeframe}: {str(e)}")
         
                 # 更新進度條
                 self.update_progress(40)
@@ -682,7 +695,7 @@ class App(tk.Tk):
                 # 更新進度條
                 self.update_progress(80)
                 
-        
+
                 self.draw_candlestick_chart(symbol_1D_split,symbol_4H_split)
                 # 更新進度條
                 self.update_progress(100)

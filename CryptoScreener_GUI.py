@@ -12,6 +12,8 @@ import time
 from datetime import datetime
 import matplotlib.dates as mdates
 
+
+
 matplotlib.use('TkAgg')
 
 class App(tk.Tk):
@@ -20,6 +22,8 @@ class App(tk.Tk):
 
         self.title("強勢加密貨幣篩選")
         self.geometry("1860x900")  # 調整主視窗大小
+        
+
         self.resizable(False, False)  # 禁用窗口缩放
         # 設置grid權重，使得區域可以隨視窗大小調整
         self.grid_rowconfigure(1, weight=1)
@@ -664,29 +668,29 @@ class App(tk.Tk):
         
                 
         
-        # 更新進度條
-        self.update_progress(40)
+                # 更新進度條
+                self.update_progress(40)
+                
+                
+                # 繪製圖表
+                self.draw_btc_eth_chart('1d')
+                # 更新進度條
+                self.update_progress(60)
+                
+                
+                self.draw_chart(symbol_1D_split, symbol_4H_split, common_symbols)
+                # 更新進度條
+                self.update_progress(80)
+                
         
-        
-        # 繪製圖表
-        self.draw_btc_eth_chart('1d')
-        # 更新進度條
-        self.update_progress(60)
-        
-        
-        self.draw_chart(symbol_1D_split, symbol_4H_split, common_symbols)
-        # 更新進度條
-        self.update_progress(80)
-        
-
-        self.draw_candlestick_chart(symbol_1D_split,symbol_4H_split)
-        # 更新進度條
-        self.update_progress(100)
-        
-        #計時
-        end_time = time.time()
-        total_time = int(end_time - start_time)
-        update_output_text(f"\n執行時間：{total_time}秒")
+                self.draw_candlestick_chart(symbol_1D_split,symbol_4H_split)
+                # 更新進度條
+                self.update_progress(100)
+                
+                #計時
+                end_time = time.time()
+                total_time = int(end_time - start_time)
+                update_output_text(f"\n執行時間：{total_time}秒")
           
 if __name__ == "__main__":
     app = App()

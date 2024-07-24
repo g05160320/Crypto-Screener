@@ -1,5 +1,7 @@
 # 強勢加密貨幣篩選
 
+![Demo](https://github.com/user-attachments/assets/1c093ca3-2064-48b6-9047-d3fd87804c1c)
+
 ## 功能
 
 ### 此程式提供一個圖形化介面，根據不同交易所加密貨幣合約市場的表現進行強勢程度篩選和排序
@@ -15,7 +17,9 @@
 ## Demo
 
 
-https://github.com/g05160320/Crypto-Screener/assets/170905829/cc80b7f8-7b5f-470d-94d9-02c7645bbabc
+
+https://github.com/user-attachments/assets/e2c2b657-9b43-4d7d-800d-43ca14804de8
+
 
 
 
@@ -53,8 +57,9 @@ pip install -r requirements.txt
 ## 執行時間
 
 執行時間因交易所限制的 request 速度及交易所標的數量不同而有所不同：
-- Binance、Bybit：10 秒內
-- OKX、Bitget：30-50 秒
+- Binance、Bybit：20-40 秒
+- OKX ：40-50 秒
+- Bitget：60-70 秒
 - BingX：60-90 秒
 
 ## 強勢標的計算方式

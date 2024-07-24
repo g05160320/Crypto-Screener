@@ -1,5 +1,7 @@
 # 強勢加密貨幣篩選
 
+![Demo](https://github.com/user-attachments/assets/1c093ca3-2064-48b6-9047-d3fd87804c1c)
+
 ## 功能
 
 ### 此程式提供一個圖形化介面，根據不同交易所加密貨幣合約市場的表現進行強勢程度篩選和排序
@@ -15,7 +17,9 @@
 ## Demo
 
 
-https://github.com/g05160320/Crypto-Screener/assets/170905829/cc80b7f8-7b5f-470d-94d9-02c7645bbabc
+
+https://github.com/user-attachments/assets/e2c2b657-9b43-4d7d-800d-43ca14804de8
+
 
 
 

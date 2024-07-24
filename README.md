@@ -1,6 +1,7 @@
 # 強勢加密貨幣篩選
 
-![Demo](https://github.com/user-attachments/assets/1c093ca3-2064-48b6-9047-d3fd87804c1c)
+![Demo](https://github.com/user-attachments/assets/699a8c84-4596-4ec6-8ed4-5d21036434e0)
+
 
 ## 功能
 
@@ -18,7 +19,11 @@
 
 
 
-https://github.com/user-attachments/assets/e2c2b657-9b43-4d7d-800d-43ca14804de8
+
+
+https://github.com/user-attachments/assets/43ca20c5-4bba-4de8-98f2-7ca7ebe2c063
+
+
 
 
 

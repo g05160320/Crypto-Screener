@@ -62,10 +62,11 @@ pip install -r requirements.txt
 ## 執行時間
 
 執行時間因交易所限制的 request 速度及交易所標的數量不同而有所不同：
-- Binance、Bybit：20-40 秒
-- OKX ：40-50 秒
+- Binance：25-30 秒
+- Bybit：30-40 秒
+- OKX ：60-70 秒
 - Bitget：60-70 秒
-- BingX：60-90 秒
+- BingX：80-120 秒
 
 ## 強勢標的計算方式
 

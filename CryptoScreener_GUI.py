@@ -11,7 +11,10 @@ import concurrent.futures
 import time
 from datetime import datetime
 import matplotlib.dates as mdates
-
+###Icon###
+import base64
+import os
+from icon import iconImg
 
 
 matplotlib.use('TkAgg')
@@ -22,7 +25,13 @@ class App(tk.Tk):
 
         self.title("強勢加密貨幣篩選")
         self.geometry("1860x900")  # 調整主視窗大小
-        
+############################Icon############################
+        tmpIcon = open('icon.ico','wb+')
+        tmpIcon.write(base64.b64decode(iconImg))
+        tmpIcon.close()
+        self.iconbitmap('icon.ico')
+        os.remove('icon.ico')
+############################Icon############################
 
         self.resizable(False, False)  # 禁用窗口缩放
         # 設置grid權重，使得區域可以隨視窗大小調整
@@ -377,7 +386,8 @@ class App(tk.Tk):
                 
             # 清空文字輸出欄位
             self.output_text.delete(1.0, tk.END)
-        
+            
+            
             if selected_exchange in ['binance', 'bybit']:
                 multi_threaded_output_text(f"從 {selected_exchange_proper_case} 獲取資料...")
                 start_time = time.time()
@@ -447,13 +457,16 @@ class App(tk.Tk):
                 
                     # 使用多線程處理符號
                     with concurrent.futures.ThreadPoolExecutor() as executor:
-                        results = [executor.submit(process_symbol, symbol, timeframe) for symbol in filtered_markets]  # 提交處理符號的任務
-                
-                        # 等待所有任務完成並處理結果
-                        for future in concurrent.futures.as_completed(results):
-                            result = future.result()  # 獲取任務的結果
-                            if result:
-                                higher_base.append(result)  # 將符合條件的交易對及其評分添加到列表中
+                        try:
+                            results = [executor.submit(process_symbol, symbol, timeframe) for symbol in filtered_markets]  # 提交處理符號的任務
+                    
+                            # 等待所有任務完成並處理結果
+                            for future in concurrent.futures.as_completed(results):
+                                result = future.result()  # 獲取任務的結果
+                                if result:
+                                    higher_base.append(result)  # 將符合條件的交易對及其評分添加到列表中
+                        except:
+                            pass 
                     
                     # 更新進度條
                     self.update_progress(30)
@@ -470,7 +483,7 @@ class App(tk.Tk):
                     higher_base = [item for item in higher_base if list(item.values())[0] >= BTC_threshold and list(item.values())[0] >= ETH_threshold and list(item.values())[0] > 0]
                     
                     # 刪除 BTC/USDT:USDT 和 ETH/USDT:USDT
-                    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT','BTCDOM/USDT:USDT','ETHDOM/USDT:USDT']]
+                    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT', 'USDC/USDT:USDT','BTCDOM/USDT:USDT']]
 
                     
                   
@@ -622,9 +635,12 @@ class App(tk.Tk):
     
         
                     for symbol in filtered_markets:
-                        result = process_symbol(symbol, timeframe)
-                        if result:
-                            higher_base.append(result)
+                        try:
+                            result = process_symbol(symbol, timeframe)
+                            if result:
+                                higher_base.append(result)
+                        except:
+                            pass
         
                     
                     # 更新進度條
@@ -642,7 +658,7 @@ class App(tk.Tk):
                     higher_base = [item for item in higher_base if list(item.values())[0] >= BTC_threshold and list(item.values())[0] >= ETH_threshold and list(item.values())[0] > 0]
                     
                     # 刪除 BTC/USDT:USDT 和 ETH/USDT:USDT
-                    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT', 'USDC/USDT:USDT','BTCDOM/USDT:USDT','ETHDOM/USDT:USDT']]
+                    higher_base = [item for item in higher_base if list(item.keys())[0] not in ['BTC/USDT:USDT', 'ETH/USDT:USDT', 'USDC/USDT:USDT','BTCDOM/USDT:USDT']]
 
 
                     for symbol_score_dict in higher_base[:10]:

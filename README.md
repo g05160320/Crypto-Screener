@@ -41,17 +41,16 @@ BingX跟其他交易所不同，有"永續合約"和"標準合約"兩種，當�
 
 ## 使用方式
 
-### 使用exe執行
-
-優點：不須架設python環境即可直接使用
-
-缺點：檔案較大55mb左右
-
 1. 雙擊開啟 exe 檔
 2. 從下拉式選單中選擇一個交易所
 3. 點擊「執行程式」按鈕
 4. 在輸出區域和圖表區域查看強勢標的篩選結果
-5. 點擊「儲存圖表」可將圖表儲存於目前 exe 檔的資料夾
+5. 複製"匯入TV"後方的文字
+6. 貼入Tradingview按下enter即可匯入清單
+![螢幕擷取畫面 2024-09-18 230429](https://github.com/user-attachments/assets/01c73e0b-7b46-4f82-9e1d-355ed42440cd)
+
+![未命名](https://github.com/user-attachments/assets/b8be6f44-159b-4316-8858-92baa0aedb85)
+
 
 
 #### Install package :

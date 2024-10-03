@@ -139,7 +139,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 
-selected_exchange=('okx')# 可更改成binance, bybit, okx, bitget, bingx
+selected_exchange=('okx')# 可更改成binance, bybit, okx, bitget, bingx, gate, mexc
 exchange = getattr(ccxt, selected_exchange)()
 markets = exchange.load_markets()
 

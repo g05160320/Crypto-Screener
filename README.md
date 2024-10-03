@@ -35,6 +35,8 @@ https://github.com/user-attachments/assets/43ca20c5-4bba-4de8-98f2-7ca7ebe2c063
 - OKX
 - Bitget
 - BingX
+- Gate.io
+- MEXC
 
 BingX跟其他交易所不同，有"永續合約"和"標準合約"兩種，當中可做交易的幣別也不完全相同
 因此ccxt只能抓到同時存在於"永續合約"和"標準合約"內的幣別
@@ -66,6 +68,8 @@ pip install -r requirements.txt
 - OKX ：60-70 秒
 - Bitget：60-70 秒
 - BingX：80-120 秒
+- Gate.io 90-100 秒
+- MEXC 120-160 秒
 
 ## 強勢標的計算方式
 
